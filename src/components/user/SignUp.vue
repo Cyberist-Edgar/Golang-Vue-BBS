@@ -234,7 +234,6 @@ this.set_academy()
       e.preventDefault();
       this.form.validateFieldsAndScroll((err, values) => {
         if (!err) {
-          console.log("Received values of form: ", values);
           this.$axios
             .post(
               "/api/user/register/",
@@ -248,7 +247,7 @@ this.set_academy()
               })
             )
             .then((res) => {
-              if (res.status === 200) {
+              if (res.data.code === 200) {
                 this.$message.success(res.data.message);
                 this.$router.push("/");
               } else {

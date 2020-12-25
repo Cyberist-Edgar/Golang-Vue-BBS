@@ -113,7 +113,7 @@ export default {
   },
   filters: {
     dateFormat(value) {
-      return value.split(" ")[0];
+      return value.split("T")[0];
     },
   },
   data() {
@@ -141,7 +141,7 @@ export default {
         })
         .catch((err) => {
           if (err.response.status === 500) {
-            this.$message.error("服务端异常");
+            this.$message.error("查询失败");
           }
         });
     },
@@ -194,10 +194,10 @@ export default {
         .post("/api/user/message/delete", qs.stringify({ id: id }))
         .then((res) => {
           if (res.data.status === 200) {
-            this.$message.success(res.data.message);
+            this.$message.success(res.data.msg);
             this.init();
           } else {
-            this.$message.success(res.data.message);
+            this.$message.success(res.data.msg);
           }
         })
         .catch((err) => {
@@ -222,10 +222,10 @@ export default {
         .post("/api/user/message/read", qs.stringify({ id: id }))
         .then((res) => {
           if (res.data.status === 200) {
-            this.$message.success(res.data.message);
+            this.$message.success(res.data.msg);
             this.init();
           } else {
-            this.$message.success(res.data.message);
+            this.$message.success(res.data.msg);
           }
         })
         .catch((err) => {

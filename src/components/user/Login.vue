@@ -113,22 +113,21 @@ export default {
           // 将value上传到服务端
           this.login(values)
             .then((res) => {
-              if (res.status === 200) {
-                this.form.resetFields();
+              if (res.data.code === 200) {
                 this.$emit("close", false);
-                window.localStorage.setItem("isLogin", "true")
-                window.localStorage.setItem("token", res.data.data.token)
+                window.localStorage.setItem("isLogin", "true");
+                window.localStorage.setItem("token", res.data.data.token);
+                window.localStorage.setItem("avatar", "/api/user/avatar/get?username="+values.username);
+                window.localStorage.setItem("username", values.username);
                 this.$message.success(res.data.message);
+                this.form.resetFields();
                 window.location.reload()
               } else {
                 this.$message.error(res.data.message);
               }
             })
-            .catch((err) => {
+            .catch(err => {
               console.log(err)
-              if (err.response.status === 500) {
-                this.$message.error("服务端异常");
-              }
             });
         }
       });
@@ -140,7 +139,8 @@ export default {
     clearInput() {
       this.form.resetFields();
     },
-    ...mapActions(["login", "setIsLogin"]),
+    ...mapActions(["login"]),
   },
+
 };
 </script>

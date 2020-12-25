@@ -88,26 +88,25 @@ export default {
       },
       thisSelectedKeys: ["7"],
       thisOpenKeys: ["sub4"],
-      username: sessionStorage.getItem("username"), // TODO
+      username: window.localStorage.getItem("username"),
     };
   },
   methods: {
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-      
+
           this.$axios.post(
-            "/api/user/update",
+            "/api/user/change_password",
             qs.stringify({
-              username: this.username,
               oldPassword: this.ruleForm.pass,
               newPassword: this.ruleForm.checkPass,
             })
           ).then(res=> {
-            if(res.data.status===200){
-              this.$message.success(res.data.message);
-              sessionStorage.clear();
-              this.$router.push("/")
+            if(res.status===200){
+              window.localStorage.clear();
+              this.$router.push("/");
+              this.$message.info("请重新登录")
             }else{
               this.$message.error(res.data.message)
             }

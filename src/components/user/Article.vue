@@ -31,7 +31,7 @@
                   </span>
                   <span>
                     <a-icon type="history" />
-                    {{ item.createTime }}
+                    {{ item.create_time | formatTime }}
                   </span>
                   <span>
                     <a-tooltip>
@@ -73,6 +73,11 @@ export default {
   components: {
     Profile,
   },
+  filters:{
+    formatTime(value){
+      return value.split("T")[0]
+    }
+  },
   data() {
     return {
       thisOpenKeys: ["sub2"], // 打开第三个子菜单
@@ -91,9 +96,9 @@ export default {
     set() {
       this.loading = true;
       this.$axios
-        .post("/api/user/article")
+        .get("/api/user/article")
         .then((res) => {
-          this.listData = res.data;
+          this.listData = res.data.data;
           this.loading = false;
         })
         .catch((err) => {
@@ -104,11 +109,11 @@ export default {
       this.$axios
         .post("/api/user/article/delete", qs.stringify({ id: id }))
         .then((res) => {
-          if (res.data.status == 200) {
-            this.$message.success(res.data.message);
+          if (res.status === 200) {
+            this.$message.success(res.data.msg);
             this.set();
           } else {
-            this.$message.error(res.data.message);
+            this.$message.error(res.data.msg);
           }
         })
         .catch((err) => {

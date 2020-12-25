@@ -35,14 +35,17 @@
                   <a-icon
                     type="history"
                     :style="{ marginRight: '8px' }"
-                  ></a-icon
-                  ><span :style="{ marginRight: '8px' }">{{
-                    item.download_times
+                  ></a-icon>
+                  <span :style="{ marginRight: '8px' }">{{
+                    item.upload_time | formatTime
                   }}</span>
                   <a-icon
                     type="download"
                     :style="{ marginRight: '8px' }"
-                  ></a-icon
+                  ></a-icon>
+                  <span :style="{ marginRight: '8px' }">{{
+                    item.download_times
+                  }}</span
                   ><span :style="{ marginRight: '8px' }"
                     ><a @click="download(item.id)">点击下载</a></span
                   >
@@ -97,6 +100,11 @@ export default {
       q: "",
     };
   },
+  filters: {
+    formatTime(value) {
+      return value.split("T")[0];
+    },
+  },
   methods: {
     set_data() {
       return new Promise((resolve, reject) => {
@@ -139,7 +147,7 @@ export default {
     },
     download(id) {
       let file = this.getFilename(id)[0];
-      let filename = file.file_name;
+      let filename = file.filename;
       let suffix = "";
       try {
         suffix = file.path.split(".")[1];

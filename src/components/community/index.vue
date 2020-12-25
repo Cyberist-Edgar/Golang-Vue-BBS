@@ -34,7 +34,7 @@
                   </a-list-item-meta>
                   <a-row>
                     <a-avatar
-                    :src="'/api/user/avatar/get_by_username?username='+item.username" 
+                    :src="'/api/user/avatar/get?username='+item.username" 
                       style="margin-right: 8px; height:1rem; width:1rem"/>
                     {{ item.username }}
                     <a-icon type="message" 
@@ -195,7 +195,7 @@ export default {
         this.$axios
           .get("/api/community/get_all")
           .then((res) => {
-            this.dataSource = res.data.data;
+            this.dataSource = res.data;
             this.maxPage = Math.ceil(res.data.length/10);
             resolve();
           })
@@ -210,7 +210,7 @@ export default {
         this.$axios
           .post("/api/community/hot", qs.stringify({ page: this.page }))
           .then((res) => {
-            this.hotArticle = res.data.data;
+            this.hotArticle = res.data;
             resolve();
           })
           .catch((err) => {
@@ -224,7 +224,7 @@ export default {
         this.$axios
           .get("/api/community/jwc")
           .then((res) => {
-            this.jwcNotice = res.data.data;
+            this.jwcNotice = res.data;
             resolve();
           })
           .catch((err) => {

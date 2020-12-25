@@ -9,7 +9,7 @@
       <a-divider></a-divider>
       <a-row align="top">
         <a-col :span="3" :offset="3">
-          <a-avatar src="/api/user/avatar/get" :size="64"></a-avatar>
+          <a-avatar :src="avatar" :size="64"></a-avatar>
         </a-col>
         <a-col :span="9">
           <a-row>
@@ -50,7 +50,7 @@
         </a-col>
       </a-row>
       <a-modal
-        title="点击上传你的头像   "
+        title="点击上传你的头像"
         centered
         v-model="visible"
         @ok="handleOk"
@@ -63,6 +63,8 @@
             <a-upload
               name="file"
               action="/api/user/avatar/upload"
+              withCredentials
+              :headers="header"
               @change="handleChange"
             >
               <a-button> <a-icon type="upload" /> Click to Upload </a-button>
@@ -161,6 +163,7 @@ const academySource = ["电院", "农生", "材料", "生医工", "安泰", "人
 
 import Profile from "./common/Profile";
 import qs from 'qs';
+import {mapState} from 'vuex';
 
 export default {
   name: "UserInfo",
@@ -172,17 +175,16 @@ export default {
       thisOpenKeys: ["sub1"], // 打开第三个子菜单
       thisSelectedKeys: ["1"],
       flag: true,
+      header:{},
       data,
       academySource,
       form: {
-        username: "",
         academy: "",
         gender: "",
         age: "",
         grade: "",
         email: "",
         description: "",
-        avatar: "",
       },
       labelCol: { span: 4 },
       wrapperCol: { span: 8 },
@@ -199,9 +201,8 @@ export default {
         this.$axios
           .post("/api/user/info")
           .then((res) => {
-            this.form = res.data;
+            this.form = res.data.data;
             resolve(res);
-            console.log(res.data);
           })
           .catch((err) => {
             reject(err);
@@ -211,6 +212,9 @@ export default {
 
     uploadAvatar() {
       console.log("upload a new avatar");
+      this.header = {
+        "Authorization": "Bearer " + window.localStorage.token
+      };
       this.visible = true;
     },
     modify() {
@@ -218,9 +222,8 @@ export default {
     },
     save() {
       this.flag = true;
-      console.log(this.form);
       this.$axios.post("/api/user/updateUserInfo", qs.stringify(this.form)).then(res=>{
-        if(res.data.status===200){
+        if(res.status===200){
           this.$message.success(res.data.message)
         }else{
           this.$message.error(res.data.message)
@@ -236,6 +239,7 @@ export default {
     // 弹出框
     handleOk() {
       console.log("ok");
+
       this.$message.success("头像修改成功", 1);
       this.visible = false;
     },
@@ -254,6 +258,9 @@ export default {
         this.$message.error(`头像上传失败`);
       }
     },
-  },
+
+  },computed:{
+    ...mapState(["avatar"])
+  }
 };
 </script>

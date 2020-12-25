@@ -55,7 +55,7 @@ export default {
       } else if (this.form.password.trim() === "") {
         this.$message.error("请输入密码");
       } else {
-        var that = this;
+        let that = this;
         this.$confirm({
           title: "你确定要删除该账号？",
           okText: "确定",
@@ -66,7 +66,7 @@ export default {
             that.$axios
               .post("/api/user/delete", qs.stringify(that.form))
               .then((res) => {
-                if (res.data.status === 200) {
+                if (res.status === 200) {
                   that.$message.success(res.data.message);
                 } else {
                   that.$message.error(res.data.message);

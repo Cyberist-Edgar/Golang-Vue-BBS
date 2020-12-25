@@ -54,7 +54,7 @@
                         dot
                 >
                   <a-avatar
-                          src="/api/user/avatar/get"
+                          :src="avatar"
                   />
                 </a-badge
                 >
@@ -183,7 +183,7 @@
 
 <script>
   import Login from "../user/Login";
-  import {mapActions, mapState} from "vuex";
+  import {mapActions, mapState,mapMutations} from "vuex";
 
   export default {
     name: "Header",
@@ -196,8 +196,10 @@
     },
     mounted() {
       this.setIsLogin()
+
       if (this.isLogin) {
         this.getMessageCount();
+        this.setAvatar(window.localStorage.getItem("avatar"))
       }
     },
     components: {
@@ -210,7 +212,7 @@
       };
     },
     computed: {
-      ...mapState(["messageCount", "isLogin"]),
+      ...mapState(["messageCount", "isLogin", "avatar"]),
     },
 
     methods: {
@@ -229,23 +231,15 @@
         this.$refs.login.clearInput();
       },
       ...mapActions(["getMessageCount", "setIsLogin"]),
+      ...mapMutations(["setAvatar"]),
       logout() {
         this.visible = false
         window.localStorage.removeItem("isLogin")
         window.localStorage.removeItem("token")
+        window.localStorage.removeItem("avatar")
         window.location.href = "/"
       },
-      getAvatar() {
-        return new Promise((resolve, reject) => {
-          this.$axios.get("/api/get").then(res => {
-            this.src = res.data.src
-            resolve();
-          }).catch(err => {
-            console.log(err);
-            reject(err);
-          })
-        })
-      }
+
     },
 
   };

@@ -41,7 +41,7 @@ export default {
     this.$axios
       .post("/api/carousel/get", qs.stringify({ num: 6 }))
       .then((res) => {
-        this.id_list = res.data.id.map((value) => 
+        this.id_list = res.data.map((value) => 
           value.id
         );
       })

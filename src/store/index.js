@@ -25,6 +25,7 @@ const store = new Vuex.Store({
         },
 
         setAvatar(state, avatar){
+            console.log(avatar)
             state.avatar = avatar;
         }
 

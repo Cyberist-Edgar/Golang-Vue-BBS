@@ -66,7 +66,7 @@
               }}</div>
               <a-avatar
                 slot="avatar"
-                :src="'/api/user/avatar/get_by_username?username='+item.username"
+                :src="'/api/user/avatar/get?username='+item.username"
               />
             </a-list-item-meta>
           </a-list-item>
